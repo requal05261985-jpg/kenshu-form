@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>研修振り返り｜新人記入</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap');
+  :root {
+    --green:#22a85a; --green-dark:#187a41; --green-light:#e6f7ed; --green-mid:#d0f0de;
+    --bg:#f2fbf5; --card:#fff; --text:#1a2e20; --muted:#5a7a62; --border:#c8e8d4;
+    --r:14px; --sh:0 2px 14px rgba(34,168,90,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px;}
+  .app-header{background:var(--green-dark);color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(24,122,65,.3);}
+  .header-row{display:flex;align-items:center;gap:8px;}
+  .header-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.05em;}
+  .header-title{font-size:15px;font-weight:700;flex:1;}
+  .header-note{font-size:10px;color:rgba(255,255,255,.7);margin-top:4px;}
+  .content{max-width:600px;margin:0 auto;padding:14px 12px;}
+  .card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:12px;overflow:hidden;border:1.5px solid var(--border);}
+  .card-hd{padding:11px 15px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border);background:var(--green);color:#fff;}
+  .card-hd-title{font-size:13px;font-weight:700;flex:1;}
+  .card-body{padding:14px 15px;background:#fafffc;}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .field-lbl{font-size:11px;font-weight:700;color:var(--green-dark);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+  .field-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:var(--text);background:#fff;transition:border-color .2s;-webkit-appearance:none;}
+  .field-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(34,168,90,.12);}
+  textarea.field-input{resize:none;min-height:85px;line-height:1.65;}
+  .action-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;}
+  .action-num{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;flex-shrink:0;margin-top:3px;background:var(--green-mid);color:var(--green-dark);}
+  .privacy-note{background:var(--green-light);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--green-dark);line-height:1.7;border-left:3px solid var(--green);}
+  .submit-area{position:fixed;bottom:0;left:0;right:0;padding:12px 14px;background:rgba(242,251,245,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);}
+  .btn-submit{width:100%;padding:15px;border:none;border-radius:12px;font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;box-shadow:0 4px 16px rgba(34,168,90,.3);transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .btn-submit:active{transform:scale(.97);}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(24,122,65,.55);z-index:200;align-items:center;justify-content:center;padding:22px;}
+  .overlay.show{display:flex;}
+  .overlay-card{background:#fff;border-radius:20px;padding:28px 24px;text-align:center;max-width:320px;width:100%;box-shadow:0 8px 40px rgba(24,122,65,.2);animation:pop .3s cubic-bezier(.175,.885,.32,1.275);}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .ov-icon{font-size:52px;margin-bottom:10px;}
+  .ov-title{font-size:19px;font-weight:700;color:var(--green-dark);margin-bottom:7px;}
+  .ov-msg{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+  .ov-data{background:var(--green-light);border-radius:10px;padding:12px;margin-bottom:16px;text-align:left;font-size:12px;color:var(--green-dark);line-height:2;}
+  .btn-close{width:100%;padding:12px;border:none;border-radius:10px;background:var(--green);color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+  .spinner{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .toast{position:fixed;top:82px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--green-dark);color:#fff;border-radius:20px;padding:5px 14px;font-size:12px;opacity:0;pointer-events:none;transition:all .22s;white-space:nowrap;z-index:150;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-row">
+    <span class="header-badge">新人用</span>
+    <span class="header-title">今日の振り返り</span>
+  </div>
+  <div class="header-note">📌 あなたの記入内容は営業マンには見えません</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="content">
+
+  <div class="privacy-note">
+    ✅ このフォームはあなた専用です。営業マンの評価は表示されていません。<br>
+    気づいたこと・感じたことを自由に書いてください。
+  </div>
+
+  <!-- 基本情報 -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">📅 基本情報</span></div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div><div class="field-lbl">日付</div><input class="field-input" id="date" placeholder="例: 4/1"></div>
+        <div><div class="field-lbl">研修日数</div>
+          <select class="field-input" id="day">
+            <option>1日目（入社）</option><option>2日目</option><option>3日目</option><option>4日目</option>
+            <option>5日目</option><option>6日目</option><option>7日目</option><option>8日目</option>
+            <option>9日目</option><option>10日目</option><option>11日目</option><option>12日目</option>
+            <option>13日目</option><option>14日目</option><option>15日目</option><option>16日目</option>
+            <option>17日目</option><option>18日目</option><option>19日目</option><option>20日目</option>
+            <option>21日目</option><option>22日目</option><option>23日目</option><option>24日目</option>
+            <option>25日目</option><option>26日目</option><option>27日目</option><option>28日目</option>
+            <option>29日目</option><option>30日目</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1"><div class="field-lbl">あなたの名前</div><input class="field-input" id="myName" placeholder="名前を入力してください"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 振り返り記入 -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">✏️ 今日の振り返り</span></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:13px">
+      <div>
+        <div class="field-lbl">本日の出来事（何をしたか）</div>
+        <textarea class="field-input" id="events" placeholder="今日やったことを書いてみよう…"></textarea>
+      </div>
+      <div>
+        <div class="field-lbl">どんな気づきがあったか</div>
+        <textarea class="field-input" id="awareness" placeholder="気づいたこと・感じたこと・失敗など…"></textarea>
+      </div>
+      <div>
+        <div class="field-lbl">担当者からのアドバイスの振り返り</div>
+        <textarea class="field-input" id="advice" placeholder="もらったアドバイスをどう活かすか…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 明日の行動 -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">🎯 明日すべき行動</span></div>
+    <div class="card-body">
+      <div class="action-row"><div class="action-num">①</div><input class="field-input" id="act1" placeholder="行動①"></div>
+      <div class="action-row"><div class="action-num">②</div><input class="field-input" id="act2" placeholder="行動②"></div>
+      <div class="action-row"><div class="action-num">③</div><input class="field-input" id="act3" placeholder="行動③"></div>
+    </div>
+  </div>
+
+  <!-- 困ってること -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">💬 困っていること・不安</span></div>
+    <div class="card-body">
+      <div class="field-lbl">気軽に書いてね</div>
+      <textarea class="field-input" id="worry" placeholder="困っていることや不安に思っていること…"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<div class="submit-area">
+  <button class="btn-submit" onclick="doSubmit()">
+    <span id="btnLbl">✏️ 送信する</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+</div>
+
+<!-- 完了オーバーレイ -->
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <div class="ov-icon">🌱</div>
+    <div class="ov-title">送信完了！</div>
+    <div class="ov-msg">記入お疲れさまでした！<br>明日もがんばりましょう。</div>
+    <div class="ov-data" id="ovData"></div>
+    <button class="btn-close" onclick="document.getElementById('overlay').classList.remove('show')">閉じる</button>
+  </div>
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbw_kxkPBOlCIePJS4c8mdvcIEaJnWtRwPZyzvx2tGo_0CXYKV1EFCmY7Vjv2lTSeFiQxg/exec';
+
+const today = new Date();
+document.getElementById('date').value = (today.getMonth()+1)+'/'+today.getDate();
+
+function showToast(txt) {
+  const t = document.getElementById('toast');
+  t.textContent = txt; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1400);
+}
+
+async function doSubmit() {
+  const date   = document.getElementById('date').value.trim();
+  const day    = document.getElementById('day').value;
+  const myName = document.getElementById('myName').value.trim();
+  if(!date||!myName){showToast('⚠️ 日付とあなたの名前を入力してください'); return;}
+
+  const payload = {
+    type: 'new',
+    date, day, newName: myName,
+    events:    document.getElementById('events').value,
+    awareness: document.getElementById('awareness').value,
+    advice:    document.getElementById('advice').value,
+    action1:   document.getElementById('act1').value,
+    action2:   document.getElementById('act2').value,
+    action3:   document.getElementById('act3').value,
+    worry:     document.getElementById('worry').value,
+    submittedAt: new Date().toLocaleString('ja-JP')
+  };
+
+  document.getElementById('btnLbl').style.display='none';
+  document.getElementById('spinner').style.display='block';
+
+  await fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {'Content-Type':'application/json'}
+  });
+
+  document.getElementById('btnLbl').style.display='block';
+  document.getElementById('spinner').style.display='none';
+
+  document.getElementById('ovData').innerHTML =
+    `📅 ${date}（${day}）<br>🌱 ${myName} の記入が完了しました`;
+  document.getElementById('overlay').classList.add('show');
+}
+</script>
+</body>
+</html>
