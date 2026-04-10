@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>研修チェック｜営業マン記入</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap');
+  :root {
+    --navy:#1a3560; --navy-mid:#2a4f8a; --blue:#3a7bd5; --blue-light:#e8f0fc;
+    --amber:#f5a623; --bg:#f4f6fb; --card:#fff; --text:#1a2340; --muted:#6b7a99;
+    --border:#dce3f0; --r:14px; --sh:0 2px 16px rgba(26,53,96,.10);
+    --s1:#e53935; --s2:#f57c00; --s3:#f5a623; --s4:#43a047; --s5:#1976d2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px;}
+  .app-header{background:var(--navy);color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,53,96,.25);}
+  .header-row{display:flex;align-items:center;gap:8px;}
+  .header-badge{background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.05em;}
+  .header-title{font-size:15px;font-weight:700;flex:1;}
+  .progress-wrap{margin-top:8px;background:rgba(255,255,255,.15);border-radius:4px;height:4px;}
+  .progress-fill{height:4px;border-radius:4px;background:var(--amber);width:0%;transition:width .4s;}
+  .progress-lbl{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.6);margin-top:3px;}
+  .content{max-width:600px;margin:0 auto;padding:14px 12px;}
+  .card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:12px;overflow:hidden;}
+  .card-hd{padding:11px 15px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border);background:var(--navy);color:#fff;}
+  .card-hd-title{font-size:13px;font-weight:700;flex:1;}
+  .card-body{padding:14px 15px;}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .field-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+  .field-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:var(--text);background:#fff;transition:border-color .2s;-webkit-appearance:none;}
+  .field-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(58,123,213,.1);}
+  textarea.field-input{resize:none;min-height:75px;line-height:1.6;}
+  .sec-lbl{font-size:11px;font-weight:700;color:var(--navy-mid);text-transform:uppercase;letter-spacing:.08em;padding:9px 15px 5px;background:var(--blue-light);border-bottom:1px solid var(--border);}
+  .legend{display:flex;gap:5px;flex-wrap:wrap;padding:9px 15px;background:#f9fafd;border-bottom:1px solid var(--border);}
+  .legend-item{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--muted);}
+  .legend-dot{width:17px;height:17px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+  .check-item{padding:10px 0;border-bottom:1px solid #f0f3fa;}
+  .check-item:last-child{border-bottom:none;}
+  .check-lbl{font-size:13px;margin-bottom:7px;line-height:1.4;}
+  .score-btns{display:flex;gap:5px;}
+  .score-btn{flex:1;height:38px;border:2px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+  .score-btn:active{transform:scale(.92);}
+  .score-btn[data-s="1"].sel{background:var(--s1);border-color:var(--s1);color:#fff;}
+  .score-btn[data-s="2"].sel{background:var(--s2);border-color:var(--s2);color:#fff;}
+  .score-btn[data-s="3"].sel{background:var(--s3);border-color:var(--s3);color:#fff;}
+  .score-btn[data-s="4"].sel{background:var(--s4);border-color:var(--s4);color:#fff;}
+  .score-btn[data-s="5"].sel{background:var(--s5);border-color:var(--s5);color:#fff;}
+  .subtotal{padding:9px 15px 10px;background:#f9fafd;display:flex;gap:8px;align-items:center;border-top:1px solid var(--border);}
+  .subtotal-val{font-size:18px;font-weight:700;color:var(--navy);font-family:'DM Sans',sans-serif;}
+  .subtotal-max{font-size:12px;color:var(--muted);}
+  .action-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;}
+  .action-num{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;flex-shrink:0;margin-top:3px;background:var(--blue-light);color:var(--navy);}
+  .submit-area{position:fixed;bottom:0;left:0;right:0;padding:12px 14px;background:rgba(244,246,251,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);}
+  .btn-submit{width:100%;padding:15px;border:none;border-radius:12px;font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff;box-shadow:0 4px 16px rgba(26,53,96,.28);transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .btn-submit:active{transform:scale(.97);}
+  .toast{position:fixed;top:82px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--navy);color:#fff;border-radius:20px;padding:5px 14px;font-size:12px;opacity:0;pointer-events:none;transition:all .22s;white-space:nowrap;z-index:150;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(26,53,96,.6);z-index:200;align-items:center;justify-content:center;padding:22px;}
+  .overlay.show{display:flex;}
+  .overlay-card{background:#fff;border-radius:20px;padding:28px 24px;text-align:center;max-width:320px;width:100%;box-shadow:0 8px 40px rgba(26,53,96,.22);animation:pop .3s cubic-bezier(.175,.885,.32,1.275);}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .ov-icon{font-size:52px;margin-bottom:10px;}
+  .ov-title{font-size:19px;font-weight:700;color:var(--navy);margin-bottom:7px;}
+  .ov-msg{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+  .ov-data{background:var(--blue-light);border-radius:10px;padding:12px;margin-bottom:16px;text-align:left;font-size:12px;color:var(--navy-mid);line-height:2;}
+  .btn-close{width:100%;padding:12px;border:none;border-radius:10px;background:var(--navy);color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+  .spinner{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="app-header">
+  <div class="header-row">
+    <span class="header-badge">営業マン用</span>
+    <span class="header-title">研修同行チェックシート</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
+  <div class="progress-lbl"><span id="progTxt">評価: 0/15項目</span><span id="scoreTxt">合計: 0/75点</span></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="content">
+
+  <!-- 基本情報 -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">📅 基本情報</span></div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div><div class="field-lbl">日付</div><input class="field-input" id="date" placeholder="例: 4/1"></div>
+        <div><div class="field-lbl">研修日数</div>
+          <select class="field-input" id="day">
+            <option>1日目（入社）</option><option>2日目</option><option>3日目</option><option>4日目</option>
+            <option>5日目</option><option>6日目</option><option>7日目</option><option>8日目</option>
+            <option>9日目</option><option>10日目</option><option>11日目</option><option>12日目</option>
+            <option>13日目</option><option>14日目</option><option>15日目</option><option>16日目</option>
+            <option>17日目</option><option>18日目</option><option>19日目</option><option>20日目</option>
+            <option>21日目</option><option>22日目</option><option>23日目</option><option>24日目</option>
+            <option>25日目</option><option>26日目</option><option>27日目</option><option>28日目</option>
+            <option>29日目</option><option>30日目</option>
+          </select>
+        </div>
+        <div><div class="field-lbl">担当者名</div><input class="field-input" id="salesName" placeholder="あなたの名前"></div>
+        <div><div class="field-lbl">新人名</div><input class="field-input" id="newName" placeholder="新人さんの名前"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 評価凡例 -->
+  <div class="card" style="overflow:hidden">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s1)">1</div>できていない</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s2)">2</div>あまりできていない</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s3)">3</div>どちらとも言えない</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s4)">4</div>できている</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s5)">5</div>よくできている</div>
+    </div>
+  </div>
+
+  <!-- 〈挨拶〉 -->
+  <div class="card">
+    <div class="sec-lbl">〈挨拶〉2項目</div>
+    <div class="card-body" style="padding:0 15px" id="g-items"></div>
+    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sg">0</span><span class="subtotal-max">/ 10点</span></div>
+  </div>
+
+  <!-- 〈身だしなみ〉 -->
+  <div class="card">
+    <div class="sec-lbl">〈身だしなみ〉5項目</div>
+    <div class="card-body" style="padding:0 15px" id="a-items"></div>
+    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sa">0</span><span class="subtotal-max">/ 25点</span></div>
+  </div>
+
+  <!-- 〈所作〉 -->
+  <div class="card">
+    <div class="sec-lbl">〈所作〉8項目</div>
+    <div class="card-body" style="padding:0 15px" id="m-items"></div>
+    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sm">0</span><span class="subtotal-max">/ 40点</span></div>
+  </div>
+
+  <!-- コメント欄 -->
+  <div class="card">
+    <div class="card-hd"><span class="card-hd-title">📝 営業マン記入欄</span></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:11px">
+      <div><div class="field-lbl">教えたこと</div><textarea class="field-input" id="taught" placeholder="本日教えた内容…"></textarea></div>
+      <div><div class="field-lbl">感想・改善点</div><textarea class="field-input" id="feedback" placeholder="感想や改善点…"></textarea></div>
+      <div><div class="field-lbl">次の担当者へのメッセージ</div><textarea class="field-input" id="message" placeholder="次の同行者へ伝えたいこと…" style="min-height:60px"></textarea></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="submitBtn" onclick="doSubmit()">
+    <span id="btnLbl">📋 送信する</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+</div>
+
+<!-- 完了オーバーレイ -->
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <div class="ov-icon">✅</div>
+    <div class="ov-title">送信完了！</div>
+    <div class="ov-msg">スプレッドシートに記録されました。お疲れさまでした！</div>
+    <div class="ov-data" id="ovData"></div>
+    <button class="btn-close" onclick="document.getElementById('overlay').classList.remove('show')">閉じる</button>
+  </div>
+</div>
+
+<script>
+// ===== Google Apps Script の URL をここに貼る =====
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxPoKijwRjR3sD80LYvqYyRum3iNSmPhrLvZ9xnjCwzbw9XNtgQN_I8Pdijz_K9YICfyw/exec';
+// ================================================
+
+const G = ["笑顔で明るくハキハキ大きな声で","語先後礼で挨拶がお客様全員に"];
+const A = ["ネクタイは会社指定のものできちんと結んであるか","リクルートスーツではなく着こなせているか","靴下は紳士靴下で靴は清潔か","髪や髭、眉も整っているか","爪は短く整っていて匂いは問題ないか"];
+const M = ["門を丁寧に開け閉めできているか","靴はそろえて「失礼します！」とあいさつできていたか","自己紹介の際に一言いう","商品を触る際に断りを入れる","商品を触る際に白手袋して、商品を写真撮る際に断りを入れる","仏壇があれば手を合わせたり、正座で座る","玄関先の物を何かひとつ褒める","メモを取る"];
+const HINTS = {1:"できていない",2:"あまりできていない",3:"どちらとも言えない",4:"できている",5:"よくできている"};
+
+const scores = {};
+let toastTimer;
+
+const today = new Date();
+document.getElementById('date').value = (today.getMonth()+1)+'/'+ today.getDate();
+
+function buildSection(items, prefix, containerId) {
+  const el = document.getElementById(containerId);
+  items.forEach((lbl, i) => {
+    const key = prefix+i;
+    scores[key] = 0;
+    const d = document.createElement('div');
+    d.className = 'check-item';
+    d.innerHTML = `<div class="check-lbl">${i+1}. ${lbl}</div><div class="score-btns">${[1,2,3,4,5].map(s=>`<button class="score-btn" data-s="${s}" onclick="pick('${key}',${s},this)">${s}</button>`).join('')}</div>`;
+    el.appendChild(d);
+  });
+}
+buildSection(G,'g','g-items');
+buildSection(A,'a','a-items');
+buildSection(M,'m','m-items');
+
+function showToast(txt) {
+  const t = document.getElementById('toast');
+  t.textContent = txt; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 1300);
+}
+
+function pick(key, val, btn) {
+  scores[key] = val;
+  btn.parentElement.querySelectorAll('.score-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  showToast(HINTS[val]);
+  recalc();
+}
+
+function recalc() {
+  let g=0,a=0,m=0,filled=0;
+  Object.keys(scores).forEach(k=>{
+    const v=scores[k]; if(v>0) filled++;
+    if(k[0]==='g') g+=v; if(k[0]==='a') a+=v; if(k[0]==='m') m+=v;
+  });
+  document.getElementById('sg').textContent=g;
+  document.getElementById('sa').textContent=a;
+  document.getElementById('sm').textContent=m;
+  document.getElementById('scoreTxt').textContent='合計: '+(g+a+m)+'/75点';
+  document.getElementById('prog').style.width=Math.round(filled/15*100)+'%';
+  document.getElementById('progTxt').textContent='評価: '+filled+'/15項目';
+}
+
+async function doSubmit() {
+  const date = document.getElementById('date').value.trim();
+  const day  = document.getElementById('day').value;
+  const sName = document.getElementById('salesName').value.trim();
+  const nName = document.getElementById('newName').value.trim();
+  if(!date||!sName||!nName){showToast('⚠️ 日付・担当者名・新人名を入力してください'); return;}
+
+  let g=0,a=0,m=0;
+  Object.keys(scores).forEach(k=>{
+    if(k[0]==='g') g+=scores[k]; if(k[0]==='a') a+=scores[k]; if(k[0]==='m') m+=scores[k];
+  });
+
+  const form = new FormData();
+  form.append('data', JSON.stringify({
+    type: 'sales',
+    date: date, day: day, salesName: sName, newName: nName,
+    scores: JSON.stringify(scores),
+    scoreGreeting: g, scoreAppearance: a, scoreManner: m, scoreTotal: g+a+m,
+    taught:    document.getElementById('taught').value,
+    feedback:  document.getElementById('feedback').value,
+    message:   document.getElementById('message').value,
+    submittedAt: new Date().toLocaleString('ja-JP')
+  }));
+
+  document.getElementById('btnLbl').style.display='none';
+  document.getElementById('spinner').style.display='block';
+
+  await fetch(GAS_URL, {
+    method: 'POST',
+    body: form,
+    mode: 'no-cors'
+  });
+
+  document.getElementById('btnLbl').style.display='block';
+  document.getElementById('spinner').style.display='none';
+
+  document.getElementById('ovData').innerHTML =
+    `📅 ${date}（${day}）<br>👔 担当者: ${sName}<br>🌱 新人: ${nName}<br>📊 評価合計: ${g+a+m}/195点`;
+  document.getElementById('overlay').classList.add('show');
+}
+</script>
+</body>
+</html>
