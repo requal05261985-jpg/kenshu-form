@@ -102,6 +102,17 @@
         </div>
         <div><div class="field-lbl">担当者名</div><input class="field-input" id="salesName" placeholder="あなたの名前"></div>
         <div><div class="field-lbl">新人名</div><input class="field-input" id="newName" placeholder="新人さんの名前"></div>
+        <div style="grid-column:1/-1"><div class="field-lbl">営業所</div>
+          <select class="field-input" id="office">
+            <option value="">選択してください</option>
+            <option>大阪営業所</option>
+            <option>名古屋営業所</option>
+            <option>福岡営業所</option>
+            <option>横浜営業所</option>
+            <option>五反田営業所</option>
+            <option>岡山店舗</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -233,7 +244,8 @@ async function doSubmit() {
   const day  = document.getElementById('day').value;
   const sName = document.getElementById('salesName').value.trim();
   const nName = document.getElementById('newName').value.trim();
-  if(!date||!sName||!nName){showToast('⚠️ 日付・担当者名・新人名を入力してください'); return;}
+  const office = document.getElementById('office').value;
+  if(!date||!sName||!nName||!office){showToast('⚠️ 日付・担当者名・新人名・営業所を入力してください'); return;}
 
   let g=0,a=0,m=0;
   Object.keys(scores).forEach(k=>{
@@ -243,7 +255,7 @@ async function doSubmit() {
   const form = new FormData();
   form.append('data', JSON.stringify({
     type: 'sales',
-    date: date, day: day, salesName: sName, newName: nName,
+    date: date, day: day, salesName: sName, newName: nName, office: office,
     scores: JSON.stringify(scores),
     scoreGreeting: g, scoreAppearance: a, scoreManner: m, scoreTotal: g+a+m,
     taught:    document.getElementById('taught').value,
@@ -265,7 +277,7 @@ async function doSubmit() {
   document.getElementById('spinner').style.display='none';
 
   document.getElementById('ovData').innerHTML =
-    `📅 ${date}（${day}）<br>👔 担当者: ${sName}<br>🌱 新人: ${nName}<br>📊 評価合計: ${g+a+m}/195点`;
+    `📅 ${date}（${day}）<br>👔 担当者: ${sName}<br>🌱 新人: ${nName}<br>🏢 営業所: ${office}<br>📊 評価合計: ${g+a+m}/75点`;
   document.getElementById('overlay').classList.add('show');
 }
 </script>

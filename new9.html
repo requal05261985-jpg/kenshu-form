@@ -87,6 +87,17 @@
           </select>
         </div>
         <div style="grid-column:1/-1"><div class="field-lbl">あなたの名前</div><input class="field-input" id="myName" placeholder="名前を入力してください"></div>
+        <div style="grid-column:1/-1"><div class="field-lbl">営業所</div>
+          <select class="field-input" id="office">
+            <option value="">選択してください</option>
+            <option>大阪営業所</option>
+            <option>名古屋営業所</option>
+            <option>福岡営業所</option>
+            <option>横浜営業所</option>
+            <option>五反田営業所</option>
+            <option>岡山店舗</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -165,12 +176,13 @@ async function doSubmit() {
   const date   = document.getElementById('date').value.trim();
   const day    = document.getElementById('day').value;
   const myName = document.getElementById('myName').value.trim();
-  if(!date||!myName){showToast('⚠️ 日付とあなたの名前を入力してください'); return;}
+  const office = document.getElementById('office').value;
+  if(!date||!myName||!office){showToast('⚠️ 日付・名前・営業所を入力してください'); return;}
 
   const form = new FormData();
   form.append('data', JSON.stringify({
     type: 'new',
-    date: date, day: day, newName: myName,
+    date: date, day: day, newName: myName, office: office,
     events:    document.getElementById('events').value,
     awareness: document.getElementById('awareness').value,
     advice:    document.getElementById('advice').value,
@@ -194,7 +206,7 @@ async function doSubmit() {
   document.getElementById('spinner').style.display='none';
 
   document.getElementById('ovData').innerHTML =
-    `📅 ${date}（${day}）<br>🌱 ${myName} の記入が完了しました`;
+    `📅 ${date}（${day}）<br>🌱 ${myName}<br>🏢 ${office} の記入が完了しました`;
   document.getElementById('overlay').classList.add('show');
 }
 </script>
