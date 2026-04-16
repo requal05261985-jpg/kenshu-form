@@ -98,6 +98,20 @@
             <option>岡山店舗</option>
           </select>
         </div>
+        <div><div class="field-lbl">入社年</div>
+          <select class="field-input" id="nyushaYear">
+            <option value="">選択してください</option>
+          </select>
+        </div>
+        <div><div class="field-lbl">入社月</div>
+          <select class="field-input" id="nyushaMonth">
+            <option value="">選択してください</option>
+            <option>1月</option><option>2月</option><option>3月</option>
+            <option>4月</option><option>5月</option><option>6月</option>
+            <option>7月</option><option>8月</option><option>9月</option>
+            <option>10月</option><option>11月</option><option>12月</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -161,7 +175,7 @@
 </div>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycby1DwCBWK_QWQNfITUZNMxMBXTKd0JXR7miuKsT0oZ2kooGkf05l8-j696DKBkxxGlPEg/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyOkYgvYd3SQBL-ML-nqVPfgeMQQ8LSA0VVFx7UYZKvSjRGYgqDN0KtNMFptYK23LnRkA/exec';
 
 const today = new Date();
 document.getElementById('date').value = (today.getMonth()+1)+'/'+today.getDate();
@@ -177,12 +191,14 @@ async function doSubmit() {
   const day    = document.getElementById('day').value;
   const myName = document.getElementById('myName').value.trim();
   const office = document.getElementById('office').value;
-  if(!date||!myName||!office){showToast('⚠️ 日付・名前・営業所を入力してください'); return;}
+  const nyushaYear = document.getElementById('nyushaYear').value;
+  const nyushaMonth = document.getElementById('nyushaMonth').value;
+  if(!date||!myName||!office||!nyushaYear||!nyushaMonth){showToast('⚠️ 日付・名前・営業所・入社年月を入力してください'); return;}
 
   const form = new FormData();
   form.append('data', JSON.stringify({
     type: 'new',
-    date: date, day: day, newName: myName, office: office,
+    date: date, day: day, newName: myName, office: office, nyushaYear: nyushaYear, nyushaMonth: nyushaMonth,
     events:    document.getElementById('events').value,
     awareness: document.getElementById('awareness').value,
     advice:    document.getElementById('advice').value,
@@ -206,9 +222,22 @@ async function doSubmit() {
   document.getElementById('spinner').style.display='none';
 
   document.getElementById('ovData').innerHTML =
-    `📅 ${date}（${day}）<br>🌱 ${myName}<br>🏢 ${office} の記入が完了しました`;
+    `📅 ${date}（${day}）<br>🌱 ${myName}（${nyushaYear}${nyushaMonth}入社）<br>🏢 ${office} の記入が完了しました`;
   document.getElementById('overlay').classList.add('show');
 }
+
+// 入社年を動的に生成（2026年〜現在+2年）
+(function() {
+  var sel = document.getElementById('nyushaYear');
+  var start = 2026;
+  var end = new Date().getFullYear() + 2;
+  for (var y = start; y <= end; y++) {
+    var opt = document.createElement('option');
+    opt.value = y + '年';
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+})();
 </script>
 </body>
 </html>
