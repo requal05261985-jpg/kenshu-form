@@ -74,19 +74,7 @@
     <div class="card-body">
       <div class="info-grid">
         <div><div class="field-lbl">日付</div><input class="field-input" id="date" placeholder="例: 4/1"></div>
-        <div><div class="field-lbl">研修日数</div>
-          <select class="field-input" id="day">
-            <option>1日目（入社）</option><option>2日目</option><option>3日目</option><option>4日目</option>
-            <option>5日目</option><option>6日目</option><option>7日目</option><option>8日目</option>
-            <option>9日目</option><option>10日目</option><option>11日目</option><option>12日目</option>
-            <option>13日目</option><option>14日目</option><option>15日目</option><option>16日目</option>
-            <option>17日目</option><option>18日目</option><option>19日目</option><option>20日目</option>
-            <option>21日目</option><option>22日目</option><option>23日目</option><option>24日目</option>
-            <option>25日目</option><option>26日目</option><option>27日目</option><option>28日目</option>
-            <option>29日目</option><option>30日目</option>
-          </select>
-        </div>
-        <div style="grid-column:1/-1"><div class="field-lbl">あなたの名前</div><input class="field-input" id="myName" placeholder="名前を入力してください"></div>
+<div style="grid-column:1/-1"><div class="field-lbl">あなたの名前</div><input class="field-input" id="myName" placeholder="名前を入力してください"></div>
         <div style="grid-column:1/-1"><div class="field-lbl">営業所</div>
           <select class="field-input" id="office">
             <option value="">選択してください</option>
@@ -188,7 +176,6 @@ function showToast(txt) {
 
 async function doSubmit() {
   const date   = document.getElementById('date').value.trim();
-  const day    = document.getElementById('day').value;
   const myName = document.getElementById('myName').value.trim();
   const office = document.getElementById('office').value;
   const nyushaYear = document.getElementById('nyushaYear').value;
@@ -198,7 +185,7 @@ async function doSubmit() {
   const form = new FormData();
   form.append('data', JSON.stringify({
     type: 'new',
-    date: date, day: day, newName: myName, office: office, nyushaYear: nyushaYear, nyushaMonth: nyushaMonth,
+    date: date, newName: myName, office: office, nyushaYear: nyushaYear, nyushaMonth: nyushaMonth,
     events:    document.getElementById('events').value,
     awareness: document.getElementById('awareness').value,
     advice:    document.getElementById('advice').value,
@@ -222,7 +209,7 @@ async function doSubmit() {
   document.getElementById('spinner').style.display='none';
 
   document.getElementById('ovData').innerHTML =
-    `📅 ${date}（${day}）<br>🌱 ${myName}（${nyushaYear}${nyushaMonth}入社）<br>🏢 ${office} の記入が完了しました`;
+    `📅 ${date}<br>🌱 ${myName}（${nyushaYear}${nyushaMonth}入社）<br>🏢 ${office} の記入が完了しました`;
   document.getElementById('overlay').classList.add('show');
 }
 
