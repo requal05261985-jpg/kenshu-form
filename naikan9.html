@@ -229,8 +229,6 @@ async function doSubmit() {
     date: date, salesName: sName, newName: nName,
     scores: '{}', scoreGreeting: 0, scoreAppearance: 0, scoreManner: 0, scoreTotal: 0,
     office: document.getElementById('office').value,
-    nyushaYear: document.getElementById('nyushaYear').value,
-    nyushaMonth: document.getElementById('nyushaMonth').value,
     nyushaYear: nyushaYear, nyushaMonth: nyushaMonth,
     taught:    document.getElementById('taught').value,
     feedback:  document.getElementById('feedback').value,
@@ -256,7 +254,7 @@ async function doSubmit() {
 }
 
 // 入社年を動的に生成（2026年〜現在+2年）
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
   var sel = document.getElementById('nyushaYear');
   if (!sel) return;
   var start = 2026;
@@ -267,21 +265,9 @@ async function doSubmit() {
     opt.textContent = y + '年';
     sel.appendChild(opt);
   }
-})();
+});
 
-// 入社年を動的に生成
-(function() {
-  var sel = document.getElementById('nyushaYear');
-  if (!sel) return;
-  var start = 2026;
-  var end = new Date().getFullYear() + 2;
-  for (var y = start; y <= end; y++) {
-    var opt = document.createElement('option');
-    opt.value = y + '年';
-    opt.textContent = y + '年';
-    sel.appendChild(opt);
-  }
-})();
+
 </script>
 </body>
 </html>
