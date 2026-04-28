@@ -87,7 +87,7 @@
     <div class="card-hd"><span class="card-hd-title">📅 基本情報</span></div>
     <div class="card-body">
       <div class="info-grid">
-        <div><div class="field-lbl">日付</div><input class="field-input" id="date" placeholder="例: 4/1"></div>
+        <div><div class="field-lbl">日付</div><input class="field-input" type="date" id="date"></div>
 <div><div class="field-lbl">担当者名</div><input class="field-input" id="salesName" placeholder="あなたの名前"></div>
         <div><div class="field-lbl">新人名</div><input class="field-input" id="newName" placeholder="例：やまだたろう"><div style="font-size:11px;color:#e53935;margin-top:4px;">※ フルネームひらがな・空白なしで入力してください（例：やまだたろう）</div></div>
         <div style="grid-column:1/-1"><div class="field-lbl">営業所</div>
@@ -169,7 +169,6 @@ const scores = {};
 let toastTimer;
 
 const today = new Date();
-document.getElementById('date').value = (today.getMonth()+1)+'/'+ today.getDate();
 
 function buildSection(items, prefix, containerId) {
   const el = document.getElementById(containerId);
@@ -216,12 +215,15 @@ function recalc() {
 }
 
 async function doSubmit() {
-  const date = document.getElementById('date').value.trim();
+  const dateRaw = document.getElementById('date').value;
+  if (!dateRaw) { showToast('⚠️ 日付を選択してください'); return; }
+  const dateParts = dateRaw.split('-');
+  const date = parseInt(dateParts[1]) + '/' + parseInt(dateParts[2]);
   const sName = document.getElementById('salesName').value.trim();
   const nName = document.getElementById('newName').value.trim();
   const nyushaYear = document.getElementById('nyushaYear').value;
   const nyushaMonth = document.getElementById('nyushaMonth').value;
-  if(!date||!sName||!nName||!nyushaYear||!nyushaMonth){showToast('⚠️ 日付・担当者名・新人名・入社年月を入力してください'); return;}
+  if(!sName||!nName||!nyushaYear||!nyushaMonth){showToast('⚠️ 担当者名・新人名・入社年月を入力してください'); return;}
 
   let g=0,a=0,m=0;
   Object.keys(scores).forEach(k=>{
