@@ -90,6 +90,31 @@
         <div><div class="field-lbl">日付</div><input class="field-input" id="date" placeholder="例: 4/1"></div>
 <div><div class="field-lbl">担当者名</div><input class="field-input" id="salesName" placeholder="あなたの名前"></div>
         <div><div class="field-lbl">新人名</div><input class="field-input" id="newName" placeholder="例：やまだたろう"><div style="font-size:11px;color:#e53935;margin-top:4px;">※ フルネームひらがな・空白なしで入力してください（例：やまだたろう）</div></div>
+        <div style="grid-column:1/-1"><div class="field-lbl">営業所</div>
+          <select class="field-input" id="office">
+            <option value="">選択してください</option>
+            <option>大阪営業所</option>
+            <option>名古屋営業所</option>
+            <option>福岡営業所</option>
+            <option>横浜営業所</option>
+            <option>五反田営業所</option>
+            <option>岡山店舗</option>
+          </select>
+        </div>
+        <div><div class="field-lbl">新人の入社年</div>
+          <select class="field-input" id="nyushaYear">
+            <option value="">選択してください</option>
+          </select>
+        </div>
+        <div><div class="field-lbl">新人の入社月</div>
+          <select class="field-input" id="nyushaMonth">
+            <option value="">選択してください</option>
+            <option>1月</option><option>2月</option><option>3月</option>
+            <option>4月</option><option>5月</option><option>6月</option>
+            <option>7月</option><option>8月</option><option>9月</option>
+            <option>10月</option><option>11月</option><option>12月</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -189,7 +214,9 @@ async function doSubmit() {
   const date = document.getElementById('date').value.trim();
   const sName = document.getElementById('salesName').value.trim();
   const nName = document.getElementById('newName').value.trim();
-  if(!date||!sName||!nName){showToast('⚠️ 日付・担当者名・新人名を入力してください'); return;}
+  const nyushaYear = document.getElementById('nyushaYear').value;
+  const nyushaMonth = document.getElementById('nyushaMonth').value;
+  if(!date||!sName||!nName||!nyushaYear||!nyushaMonth){showToast('⚠️ 日付・担当者名・新人名・入社年月を入力してください'); return;}
 
   let g=0,a=0,m=0;
   Object.keys(scores).forEach(k=>{
@@ -201,6 +228,10 @@ async function doSubmit() {
     type: 'naikan',
     date: date, salesName: sName, newName: nName,
     scores: '{}', scoreGreeting: 0, scoreAppearance: 0, scoreManner: 0, scoreTotal: 0,
+    office: document.getElementById('office').value,
+    nyushaYear: document.getElementById('nyushaYear').value,
+    nyushaMonth: document.getElementById('nyushaMonth').value,
+    nyushaYear: nyushaYear, nyushaMonth: nyushaMonth,
     taught:    document.getElementById('taught').value,
     feedback:  document.getElementById('feedback').value,
     message:   document.getElementById('message').value,
@@ -223,6 +254,34 @@ async function doSubmit() {
     `📅 ${date}<br>👔 担当者（内勤）: ${sName}<br>🌱 新人: ${nName}`;
   document.getElementById('overlay').classList.add('show');
 }
+
+// 入社年を動的に生成（2026年〜現在+2年）
+(function() {
+  var sel = document.getElementById('nyushaYear');
+  if (!sel) return;
+  var start = 2026;
+  var end = new Date().getFullYear() + 2;
+  for (var y = start; y <= end; y++) {
+    var opt = document.createElement('option');
+    opt.value = y + '年';
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+})();
+
+// 入社年を動的に生成
+(function() {
+  var sel = document.getElementById('nyushaYear');
+  if (!sel) return;
+  var start = 2026;
+  var end = new Date().getFullYear() + 2;
+  for (var y = start; y <= end; y++) {
+    var opt = document.createElement('option');
+    opt.value = y + '年';
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+})();
 </script>
 </body>
 </html>
