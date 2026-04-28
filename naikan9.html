@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>研修チェック｜営業マン記入</title>
+<title>研修チェック｜内勤記入</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap');
   :root {
@@ -73,10 +73,10 @@
 <div class="app-header">
   <div class="header-row">
     <span class="header-badge">営業マン用</span>
-    <span class="header-title">研修同行チェックシート</span>
+    <span class="header-title">研修チェックシート（内勤用）</span>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
-  <div class="progress-lbl"><span id="progTxt">評価: 0/15項目</span><span id="scoreTxt">合計: 0/75点</span></div>
+  <div class="progress-lbl"><span id="progTxt"></span><span id="scoreTxt">内勤用フォーム</span></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -94,41 +94,10 @@
     </div>
   </div>
 
-  <!-- 評価凡例 -->
-  <div class="card" style="overflow:hidden">
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--s1)">1</div>できていない</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--s2)">2</div>あまりできていない</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--s3)">3</div>どちらとも言えない</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--s4)">4</div>できている</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--s5)">5</div>よくできている</div>
-    </div>
-  </div>
-
-  <!-- 〈挨拶〉 -->
-  <div class="card">
-    <div class="sec-lbl">〈挨拶〉2項目</div>
-    <div class="card-body" style="padding:0 15px" id="g-items"></div>
-    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sg">0</span><span class="subtotal-max">/ 10点</span></div>
-  </div>
-
-  <!-- 〈身だしなみ〉 -->
-  <div class="card">
-    <div class="sec-lbl">〈身だしなみ〉5項目</div>
-    <div class="card-body" style="padding:0 15px" id="a-items"></div>
-    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sa">0</span><span class="subtotal-max">/ 25点</span></div>
-  </div>
-
-  <!-- 〈所作〉 -->
-  <div class="card">
-    <div class="sec-lbl">〈所作〉8項目</div>
-    <div class="card-body" style="padding:0 15px" id="m-items"></div>
-    <div class="subtotal"><span style="font-size:12px;font-weight:600;color:var(--muted)">小計</span><span class="subtotal-val" id="sm">0</span><span class="subtotal-max">/ 40点</span></div>
-  </div>
 
   <!-- コメント欄 -->
   <div class="card">
-    <div class="card-hd"><span class="card-hd-title">📝 営業マン記入欄</span></div>
+    <div class="card-hd"><span class="card-hd-title">📝 内勤記入欄</span></div>
     <div class="card-body" style="display:flex;flex-direction:column;gap:11px">
       <div><div class="field-lbl">教えたこと</div><textarea class="field-input" id="taught" placeholder="本日教えた内容…"></textarea></div>
       <div><div class="field-lbl">感想・改善点</div><textarea class="field-input" id="feedback" placeholder="感想や改善点…"></textarea></div>
@@ -229,10 +198,9 @@ async function doSubmit() {
 
   const form = new FormData();
   form.append('data', JSON.stringify({
-    type: 'sales',
+    type: 'naikan',
     date: date, salesName: sName, newName: nName,
-    scores: JSON.stringify(scores),
-    scoreGreeting: g, scoreAppearance: a, scoreManner: m, scoreTotal: g+a+m,
+    scores: '{}', scoreGreeting: 0, scoreAppearance: 0, scoreManner: 0, scoreTotal: 0,
     taught:    document.getElementById('taught').value,
     feedback:  document.getElementById('feedback').value,
     message:   document.getElementById('message').value,
@@ -252,7 +220,7 @@ async function doSubmit() {
   document.getElementById('spinner').style.display='none';
 
   document.getElementById('ovData').innerHTML =
-    `📅 ${date}<br>👔 担当者: ${sName}<br>🌱 新人: ${nName}<br>📊 評価合計: ${g+a+m}/75点`;
+    `📅 ${date}<br>👔 担当者（内勤）: ${sName}<br>🌱 新人: ${nName}`;
   document.getElementById('overlay').classList.add('show');
 }
 </script>
