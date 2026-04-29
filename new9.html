@@ -163,10 +163,9 @@
 </div>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbw83RKwXjUHwsxBb0k4Vr80ezhCIQ-JMJW86ld8TerpGOWeU1tFeBl-YwBiyiomeXKzYw/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwCaNqSMeLr_tl6ym5AaPUz2aQP3DNxBAlYYrtyvfUSzRV2bO8BrECFbIpI7qeJr19iJQ/exec';
 
-const today = new Date();
-document.getElementById('date').value = (today.getMonth()+1)+'/'+today.getDate();
+
 
 function showToast(txt) {
   const t = document.getElementById('toast');
@@ -175,7 +174,10 @@ function showToast(txt) {
 }
 
 async function doSubmit() {
-  const date   = document.getElementById('date').value.trim();
+  const dateRaw = document.getElementById('date').value;
+  if (!dateRaw) { showToast('⚠️ 日付を選択してください'); return; }
+  const dateParts = dateRaw.split('-');
+  const date = parseInt(dateParts[1]) + '/' + parseInt(dateParts[2]);
   const myName = document.getElementById('myName').value.trim();
   const office = document.getElementById('office').value;
   const nyushaYear = document.getElementById('nyushaYear').value;
