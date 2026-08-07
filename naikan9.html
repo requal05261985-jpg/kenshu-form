@@ -158,7 +158,7 @@
 
 <script>
 // ===== Google Apps Script の URL をここに貼る =====
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwyLMfBthoJRpG90OoidXSZuTlo23vcpHjOC0k2LXWL37hmTiAJ5MJrrv7br7A54wkqMQ/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwb1VPitNyl5SIfyEuiX0sDbU4qTCUqa3lRQO_2cFCDBcFeeonFHj95hL-uJp2ASp6oag/exec';
 // ================================================
 
 const G = ["笑顔で明るくハキハキ大きな声で","語先後礼で挨拶がお客様全員に"];
@@ -276,6 +276,46 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+// 自動保存・復元機能
+const SAVE_KEY = 'kenshu_naikan_draft';
+
+function getInputIds() {
+  return Array.from(document.querySelectorAll('input[id], select[id], textarea[id]'))
+    .map(el => el.id).filter(id => id);
+}
+
+function saveForm() {
+  const data = {};
+  getInputIds().forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+}
+
+function restoreForm() {
+  const saved = localStorage.getItem(SAVE_KEY);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id]) el.value = data[id];
+    });
+  } catch(e) {}
+}
+
+function clearSaved() {
+  localStorage.removeItem(SAVE_KEY);
+}
+
+// 入力のたびに自動保存
+document.addEventListener('input', saveForm);
+document.addEventListener('change', saveForm);
+
+// ページ読み込み時に復元
+window.addEventListener('load', restoreForm);
 </script>
 </body>
 </html>
