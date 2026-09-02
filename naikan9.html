@@ -154,7 +154,7 @@
     <div class="ov-title">送信完了！</div>
     <div class="ov-msg">スプレッドシートに記録されました。お疲れさまでした！</div>
     <div class="ov-data" id="ovData"></div>
-    <button class="btn-close" onclick="document.getElementById('overlay').classList.remove('show')">閉じる</button>
+    <button class="btn-close" onclick="localStorage.removeItem('kenshu_naikan_draft'); location.reload();">閉じる</button>
   </div>
 </div>
 
@@ -267,7 +267,6 @@ async function doSubmit() {
   document.getElementById('ovData').innerHTML =
     `📅 ${date}<br>👔 担当者（内勤）: ${sName}<br>🌱 新人: ${nName}`;
   document.getElementById('overlay').classList.add('show');
-  setTimeout(function(){ location.reload(); }, 3000);
 }
 
 // 入社年を動的に生成（2026年〜現在+2年）
@@ -286,6 +285,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+// 自動保存・復元機能
+const SAVE_KEY = 'kenshu_naikan_draft';
+function saveForm() {
+  const data = {};
+  document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el) {
+    data[el.id] = el.value;
+  });
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+}
+function restoreForm() {
+  const saved = localStorage.getItem(SAVE_KEY);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el && data[id]) el.value = data[id];
+    });
+  } catch(e) {}
+}
+document.addEventListener('input', saveForm);
+document.addEventListener('change', saveForm);
+window.addEventListener('load', restoreForm);
 </script>
 </body>
 </html>
