@@ -237,7 +237,12 @@ async function doSubmit() {
   const sName = document.getElementById('salesName').value.trim();
   const nName = document.getElementById('newName').value.trim();
   const office = document.getElementById('office').value;
-  if(!sName||!nName||!office){showToast('⚠️ 担当者名・新人名・営業所を入力してください'); return;}
+  const taught = document.getElementById('taught').value.trim();
+  const feedback = document.getElementById('feedback').value.trim();
+  const message = document.getElementById('message').value.trim();
+  if(!sName||!nName||!office||!taught||!feedback||!message){
+    showToast('⚠️ 全ての項目を入力してください'); return;
+  }
 
   let g=0,a=0,m=0;
   Object.keys(scores).forEach(k=>{

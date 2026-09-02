@@ -226,7 +226,13 @@ async function doSubmit() {
   const nName = document.getElementById('newName').value.trim();
   const nyushaYear = document.getElementById('nyushaYear').value;
   const nyushaMonth = document.getElementById('nyushaMonth').value;
-  if(!sName||!nName||!nyushaYear||!nyushaMonth){showToast('⚠️ 担当者名・新人名・入社年月を入力してください'); return;}
+  const officeN = document.getElementById('office').value;
+  const taughtN = document.getElementById('taught').value.trim();
+  const feedbackN = document.getElementById('feedback').value.trim();
+  const messageN = document.getElementById('message').value.trim();
+  if(!sName||!nName||!officeN||!nyushaYear||!nyushaMonth||!taughtN||!feedbackN||!messageN){
+    showToast('⚠️ 全ての項目を入力してください'); return;
+  }
 
   let g=0,a=0,m=0;
   Object.keys(scores).forEach(k=>{

@@ -185,7 +185,16 @@ async function doSubmit() {
   const office = document.getElementById('office').value;
   const nyushaYear = document.getElementById('nyushaYear').value;
   const nyushaMonth = document.getElementById('nyushaMonth').value;
-  if(!myName||!office||!nyushaYear||!nyushaMonth){showToast('⚠️ 名前・営業所・入社年月を入力してください'); return;}
+  const events = document.getElementById('events').value.trim();
+  const awareness = document.getElementById('awareness').value.trim();
+  const advice = document.getElementById('advice').value.trim();
+  const act1 = document.getElementById('act1').value.trim();
+  const act2 = document.getElementById('act2').value.trim();
+  const act3 = document.getElementById('act3').value.trim();
+  const worry = document.getElementById('worry').value.trim();
+  if(!myName||!office||!nyushaYear||!nyushaMonth||!events||!awareness||!advice||!act1||!act2||!act3||!worry){
+    showToast('⚠️ 全ての項目を入力してください'); return;
+  }
 
   const form = new FormData();
   form.append('data', JSON.stringify({
