@@ -224,6 +224,10 @@ async function doSubmit() {
 
   document.getElementById('ovData').innerHTML =
     `📅 ${date}<br>🌱 ${myName}（${nyushaYear}${nyushaMonth}入社）<br>🏢 ${office} の記入が完了しました`;
+  clearSaved();
+  document.querySelectorAll('input:not([type=button]), select, textarea').forEach(function(el){ el.value = ''; });
+  // スコアボタンもリセット
+  document.querySelectorAll('.score-btn.sel').forEach(function(b){ b.classList.remove('sel'); });
   document.getElementById('overlay').classList.add('show');
 }
 
