@@ -275,6 +275,7 @@ async function doSubmit() {
 
   document.getElementById('ovData').innerHTML =
     `📅 ${date}<br>👔 担当者: ${sName}<br>🌱 新人: ${nName}<br>📊 評価合計: ${g+a+m}/75点`;
+  formSubmitted = true;
   clearSaved();
   document.querySelectorAll('input:not([type=button]), select, textarea').forEach(function(el){ el.value = ''; });
   // スコアボタンもリセット
@@ -299,7 +300,10 @@ function saveForm() {
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
 }
 
+let formSubmitted = false;
+
 function restoreForm() {
+  if (formSubmitted) return;
   const saved = localStorage.getItem(SAVE_KEY);
   if (!saved) return;
   try {
