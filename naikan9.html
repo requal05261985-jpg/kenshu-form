@@ -266,12 +266,9 @@ async function doSubmit() {
 
   document.getElementById('ovData').innerHTML =
     `📅 ${date}<br>👔 担当者（内勤）: ${sName}<br>🌱 新人: ${nName}`;
-  formSubmitted = true;
   clearSaved();
-  document.querySelectorAll('input:not([type=button]), select, textarea').forEach(function(el){ el.value = ''; });
-  // スコアボタンもリセット
-  document.querySelectorAll('.score-btn.sel').forEach(function(b){ b.classList.remove('sel'); });
   document.getElementById('overlay').classList.add('show');
+  setTimeout(function(){ location.reload(); }, 3000);
 }
 
 // 入社年を動的に生成（2026年〜現在+2年）
