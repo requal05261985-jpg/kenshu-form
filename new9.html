@@ -192,8 +192,20 @@ async function doSubmit() {
   const act2 = document.getElementById('act2').value.trim();
   const act3 = document.getElementById('act3').value.trim();
   const worry = document.getElementById('worry').value.trim();
-  if(!myName||!office||!nyushaYear||!nyushaMonth||!events||!awareness||!advice||!act1||!act2||!act3||!worry){
-    showToast('⚠️ 全ての項目を入力してください'); return;
+  let emptyFields = [];
+  if(!myName) emptyFields.push('あなたの名前');
+  if(!office) emptyFields.push('営業所');
+  if(!nyushaYear) emptyFields.push('入社年');
+  if(!nyushaMonth) emptyFields.push('入社月');
+  if(!events) emptyFields.push('本日の出来事');
+  if(!awareness) emptyFields.push('気づき');
+  if(!advice) emptyFields.push('アドバイスの振り返り');
+  if(!act1) emptyFields.push('明日の行動①');
+  if(!act2) emptyFields.push('明日の行動②');
+  if(!act3) emptyFields.push('明日の行動③');
+  if(!worry) emptyFields.push('困っていること');
+  if(emptyFields.length > 0){
+    showToast('⚠️ 未入力: ' + emptyFields.join('・')); return;
   }
 
   const form = new FormData();
