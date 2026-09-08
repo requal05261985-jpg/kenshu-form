@@ -181,8 +181,35 @@ async function doSubmit() {
   document.getElementById('ovData').innerHTML =
     '📅 ' + date + '<br>👔 担当者: ' + sName + '<br>🌱 新人: ' + nName;
   document.getElementById('overlay').classList.add('show');
-  setTimeout(function(){ location.reload(); }, 3000);
+  window._clearDraft && window._clearDraft(); setTimeout(function(){ location.reload(); }, 3000);
 }
+
+// 自動保存・復元機能
+(function() {
+  const SAVE_KEY = 'kenshu_sales_draft';
+  function saveForm() {
+    const data = {};
+    document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el) {
+      data[el.id] = el.value;
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  }
+  function restoreForm() {
+    const saved = localStorage.getItem(SAVE_KEY);
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el && data[id]) el.value = data[id];
+      });
+    } catch(e) {}
+  }
+  document.addEventListener('input', saveForm);
+  document.addEventListener('change', saveForm);
+  window.addEventListener('load', restoreForm);
+  window._clearDraft = function() { localStorage.removeItem(SAVE_KEY); };
+})();
 </script>
 </body>
 </html>
