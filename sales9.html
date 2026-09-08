@@ -152,8 +152,15 @@ async function doSubmit() {
   const taught = document.getElementById('taught').value.trim();
   const feedback = document.getElementById('feedback').value.trim();
   const message = document.getElementById('message').value.trim();
-  if(!sName||!nName||!office||!taught||!feedback||!message){
-    showToast('⚠️ 全ての項目を入力してください'); return;
+  let emptyFields = [];
+  if(!sName) emptyFields.push('担当者名');
+  if(!nName) emptyFields.push('新人名');
+  if(!office) emptyFields.push('営業所');
+  if(!taught) emptyFields.push('教えたこと');
+  if(!feedback) emptyFields.push('感想・改善点');
+  if(!message) emptyFields.push('次の担当者へのメッセージ');
+  if(emptyFields.length > 0){
+    showToast('⚠️ 未入力: ' + emptyFields.join('・')); return;
   }
 
 
