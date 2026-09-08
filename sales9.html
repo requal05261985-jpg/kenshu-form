@@ -163,8 +163,32 @@ async function doSubmit() {
     showToast('⚠️ 未入力: ' + emptyFields.join('・')); return;
   }
 
+  document.getElementById('btnLbl').style.display='none';
+  document.getElementById('spinner').style.display='block';
 
+  const payload = {
+    type: 'sales',
+    submittedAt: new Date().toLocaleString('ja-JP'),
+    date: date, salesName: sName, newName: nName, office: office,
+    scores: '{}', scoreGreeting: 0, scoreAppearance: 0, scoreManner: 0, scoreTotal: 0,
+    taught: taught, feedback: feedback, message: message
+  };
 
+  const fd = new FormData();
+  fd.append('data', JSON.stringify(payload));
+
+  try {
+    await fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+  } catch(e) {}
+
+  document.getElementById('btnLbl').style.display='block';
+  document.getElementById('spinner').style.display='none';
+
+  document.getElementById('ovData').innerHTML =
+    '📅 ' + date + '<br>👔 担当者: ' + sName + '<br>🌱 新人: ' + nName;
+  document.getElementById('overlay').classList.add('show');
+  setTimeout(function(){ location.reload(); }, 3000);
+}
 </script>
 </body>
 </html>
